@@ -88,3 +88,5 @@ if st.button("🔍 Predict My Segment"):
     st.info(f"**Profile:** {info['description']}")
     st.warning(f"**Recommendation:** {info['recommendation']}")
     st.markdown("---")
+
+    st.markdown(f"**Cluster ID:** `{cluster}`")
