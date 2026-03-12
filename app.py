@@ -16,12 +16,12 @@ cluster_info = {
         "recommendation": "Target with discount deals, family bundles, and budget-friendly promotions."
     },
     1: {
-        "name": "🟡 High Value Loyalists",
+        "name": "🔵 High Value Loyalists",
         "description": "Highest income, maximum spending, campaign-responsive, prefer catalogue shopping.",
         "recommendation": "Target with premium products, exclusive catalogues, and personalized campaigns."
     },
     2: {
-        "name": "🔵 Middle Class Actives",
+        "name": "🟡 Middle Class Actives",
         "description": "Mid-range income, loyal customers with moderate spending across all channels.",
         "recommendation": "Reward loyalty with membership programs and mid-range product promotions."
     }
@@ -45,43 +45,56 @@ with col2:
     mnt_wines           = st.number_input("Spent on Wines ($)",         0, 1500, 100)
     mnt_fruits          = st.number_input("Spent on Fruits ($)",        0, 200, 20)
     mnt_meat            = st.number_input("Spent on Meat ($)",          0, 1500, 100)
+    mnt_fish            = st.number_input("Spent on Fish ($)",          0, 300, 10)
+    mnt_sweet           = st.number_input("Spent on Sweets ($)",        0, 300, 10)
     mnt_gold            = st.number_input("Spent on Gold ($)",          0, 400, 50)
 
 with col3:
     num_web_purchases   = st.number_input("Web Purchases",              0, 30, 5)
     num_store_purchases = st.number_input("Store Purchases",            0, 20, 5)
     num_catalog         = st.number_input("Catalog Purchases",          0, 30, 2)
+    num_deals           = st.number_input("Deal Purchases",             0, 15, 1)
     num_web_visits      = st.number_input("Web Visits/Month",           0, 20, 5)
     campaigns_accepted  = st.number_input("Campaigns Accepted (0-6)",  0, 6, 0)
+
     
-# ── Derived features ───────────────────────────
-total_spending        = mnt_wines + mnt_fruits + mnt_meat + mnt_gold
-total_purchases       = num_web_purchases + num_store_purchases + num_catalog
-spending_per_purchase = total_spending / (total_purchases + 1)
 
 if st.button("🔍 Predict My Segment"):
 
+    total_spending        = mnt_wines + mnt_fruits + mnt_meat + mnt_fish + mnt_sweet + mnt_gold
+    total_purchases       = num_web_purchases + num_store_purchases + num_catalog + num_deals
+    spending_per_purchase = total_spending / (total_purchases + 1)
+
+    mnt_wines_log  = np.log1p(mnt_wines)
+    mnt_fruits_log = np.log1p(mnt_fruits)
+    mnt_meat_log   = np.log1p(mnt_meat)
+    mnt_fish_log   = np.log1p(mnt_fish)
+    mnt_sweet_log  = np.log1p(mnt_sweet)
+    mnt_gold_log   = np.log1p(mnt_gold)
+
     input_data = pd.DataFrame([[
-    income, age, recency, total_spending, total_purchases,
-    spending_per_purchase, tenure_days, total_children, campaigns_accepted,
-    mnt_wines, mnt_meat, mnt_fruits, mnt_gold,
-    num_web_purchases, num_store_purchases, num_catalog,
-    num_web_visits, 1, 0
-]], columns=[
-    'Income', 'Age', 'Recency', 'Total_Spending', 'Total_Purchases',
-    'Spending_Per_Purchase', 'Customer_Tenure_Days', 'Total_Children',
-    'Total_Campaign_Accepted', 'MntWines', 'MntMeatProducts', 'MntFruits',
-    'MntGoldProds', 'NumWebPurchases', 'NumStorePurchases',
-    'NumCatalogPurchases', 'NumWebVisitsMonth', 'Marital_Status_Partnered',
-    'Education_Group_Postgraduate'
-])
+        income, recency, mnt_wines_log, mnt_fruits_log, mnt_meat_log,
+        mnt_fish_log, mnt_sweet_log, mnt_gold_log,
+        num_deals, num_web_purchases, num_catalog, num_store_purchases,
+        num_web_visits, age, total_children, campaigns_accepted,
+        tenure_days, total_purchases, total_spending, spending_per_purchase,
+        1, 0, 0, 0, 0
+    ]], columns=[
+        'Income', 'Recency', 'MntWines', 'MntFruits', 'MntMeatProducts',
+        'MntFishProducts', 'MntSweetProducts', 'MntGoldProds',
+        'NumDealsPurchases', 'NumWebPurchases', 'NumCatalogPurchases',
+        'NumStorePurchases', 'NumWebVisitsMonth', 'Age', 'Total_Children',
+        'Total_Campaign_Accepted', 'Customer_Tenure_Days', 'Total_Purchases',
+        'Total_Spending', 'Spending_Per_Purchase',
+        'Marital_Status_Partnered', 'Marital_Status_Single',
+        'Marital_Status_Widow', 'Education_Group_Postgraduate',
+        'Education_Group_Undergraduate'
+    ])
 
-
-
-    input_scaled = scaler.transform(input_data) 
+    input_scaled    = scaler.transform(input_data)
     input_scaled_df = pd.DataFrame(input_scaled, columns=input_data.columns)
-    input_pca    = pca.transform(input_scaled_df)     
-    cluster      = model.predict(input_pca)[0]
+    input_pca       = pca.transform(input_scaled_df)
+    cluster         = model.predict(input_pca)[0]
 
     info = cluster_info[cluster]
     st.success(f"### Predicted Segment: {info['name']}")

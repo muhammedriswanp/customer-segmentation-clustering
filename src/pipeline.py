@@ -4,14 +4,14 @@ from src.feature_engineering import engineer_features, scale_features
 from src.clustering import apply_pca, run_kmeans
 import joblib
 
-FEATURE_COLS = [
-    'Income', 'Age', 'Recency', 'Total_Spending', 'Total_Purchases',
-    'Spending_Per_Purchase', 'Customer_Tenure_Days', 'Total_Children',
-    'Total_Campaign_Accepted', 'MntWines', 'MntMeatProducts', 'MntFruits',
-    'MntGoldProds', 'NumWebPurchases', 'NumStorePurchases',
-    'NumCatalogPurchases', 'NumWebVisitsMonth', 'Marital_Status_Partnered',
-    'Education_Group_Postgraduate'
-]
+# FEATURE_COLS = [
+#     'Income', 'Age', 'Recency', 'Total_Spending', 'Total_Purchases',
+#     'Spending_Per_Purchase', 'Customer_Tenure_Days', 'Total_Children',
+#     'Total_Campaign_Accepted', 'MntWines', 'MntMeatProducts', 'MntFruits',
+#     'MntGoldProds', 'NumWebPurchases', 'NumStorePurchases',
+#     'NumCatalogPurchases', 'NumWebVisitsMonth', 'Marital_Status_Partnered',
+#     'Education_Group_Postgraduate'
+# ]
 
 def run_pipeline(input_path, output_path):
     print("Loading Data...")
@@ -24,7 +24,7 @@ def run_pipeline(input_path, output_path):
     df = engineer_features(df)
 
     print("Scaling features ...")
-    X_scaled, scaler = scale_features(df, FEATURE_COLS)
+    X_scaled, scaler = scale_features(df)
 
     print("Applying PCA...")
     X_pca, pca = apply_pca(X_scaled)

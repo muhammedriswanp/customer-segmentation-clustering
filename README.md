@@ -1,4 +1,4 @@
-# Customer Segmentation & Clustering 🛍️
+# Customer Segmentation & Clustering 
 
 Groups customers into distinct segments based on purchasing behavior and demographics using unsupervised machine learning.
 

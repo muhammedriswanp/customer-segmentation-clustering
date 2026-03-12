@@ -64,9 +64,9 @@ def apply_log_transform(df):
 #     return X_scaled, scaler
 
 # only choose need 
-def scale_features(df, feature_cols):
+def scale_features(df):
     scaler = StandardScaler()
-    X_scaled = pd.DataFrame(scaler.fit_transform(df[feature_cols]), columns=feature_cols)
+    X_scaled = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
     return X_scaled, scaler
 
 
