@@ -10,20 +10,20 @@ model = joblib.load('outputs/models/kmeans_model.pkl')
 
 # ── Cluster info ───────────────────────────────
 cluster_info = {
-    2: {
+    0: {
         "name": "🟣 Budget Conscious Families",
         "description": "Low income, high number of children, price-sensitive customers who browse frequently but spend minimally.",
         "recommendation": "Target with discount deals, family bundles, and budget-friendly promotions."
-    },
-    0: {
-        "name": "🔵 Middle Class Actives",
-        "description": "Mid-range income, loyal customers with moderate spending across all channels.",
-        "recommendation": "Reward loyalty with membership programs and mid-range product promotions."
     },
     1: {
         "name": "🟡 High Value Loyalists",
         "description": "Highest income, maximum spending, campaign-responsive, prefer catalogue shopping.",
         "recommendation": "Target with premium products, exclusive catalogues, and personalized campaigns."
+    },
+    2: {
+        "name": "🔵 Middle Class Actives",
+        "description": "Mid-range income, loyal customers with moderate spending across all channels.",
+        "recommendation": "Reward loyalty with membership programs and mid-range product promotions."
     }
 }
 

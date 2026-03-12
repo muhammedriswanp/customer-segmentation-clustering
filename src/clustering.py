@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, AgglomerativeClustering
 from sklearn.metrics import silhouette_score
+
 
 
 def apply_pca(X, variance_threshold=0.9):
@@ -68,3 +69,8 @@ def plot_silhouette_scores(X, k_range=range(2, 10)):
     plt.show()
     return scores
     
+def run_hierarchical(X, n_clusters=5, linkage='ward'):
+    """Train Agglomerative Clustering model."""
+    model = AgglomerativeClustering(n_clusters=n_clusters, linkage=linkage)
+    labels = model.fit_predict(X)
+    return model, labels
