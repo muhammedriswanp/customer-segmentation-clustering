@@ -21,7 +21,7 @@ def compute_elbow(X, k_range=range(1, 11)):
     wcss = []
 
     for k in k_range:
-        model = KMeans(n_clusters=k, random_state=42, n_init=10)
+        model = KMeans(n_clusters=k, random_state=42, n_init=10)# runs 10 times with different random starting points and picks the best result.
         model.fit(X)
         wcss.append(model.inertia_)
 

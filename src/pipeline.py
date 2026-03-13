@@ -4,14 +4,6 @@ from src.feature_engineering import engineer_features, scale_features
 from src.clustering import apply_pca, run_kmeans
 import joblib
 
-# FEATURE_COLS = [
-#     'Income', 'Age', 'Recency', 'Total_Spending', 'Total_Purchases',
-#     'Spending_Per_Purchase', 'Customer_Tenure_Days', 'Total_Children',
-#     'Total_Campaign_Accepted', 'MntWines', 'MntMeatProducts', 'MntFruits',
-#     'MntGoldProds', 'NumWebPurchases', 'NumStorePurchases',
-#     'NumCatalogPurchases', 'NumWebVisitsMonth', 'Marital_Status_Partnered',
-#     'Education_Group_Postgraduate'
-# ]
 
 def run_pipeline(input_path, output_path):
     print("Loading Data...")
