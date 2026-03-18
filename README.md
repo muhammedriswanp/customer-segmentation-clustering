@@ -1,4 +1,4 @@
-# Customer Segmentation & Clustering 
+# Customer Segmentation & Clustering
 
 Groups customers into distinct segments based on purchasing behavior and demographics using unsupervised machine learning.
 
@@ -10,11 +10,12 @@ Groups customers into distinct segments based on purchasing behavior and demogra
 
 ## Approach
 
-- **EDA** — outlier removal (age > 100, income > 600K), education grouping, marital status cleanup
-- **Preprocessing** — duplicates removed, missing income dropped, irrelevant columns (`ID`, `Response`, `Z_*`, `Complain`) dropped (`preprocessing.py`)
-- **Feature Engineering** — derived `Age`, `Total_Children`, `Total_Campaign_Accepted`, `Customer_Tenure_Days`, `Total_Spending`, `Total_Purchases`, `Spending_Per_Purchase`; log-transform on skewed spend cols; one-hot encoding (`feature_engineering.py`)
-- **Dimensionality Reduction** — PCA retaining 90% variance (`clustering.py`)
-- **Clustering** — optimal K via Elbow + Silhouette scores; final model K-Means (K = 3); Agglomerative used for comparison (`clustering.py`)
+- **Preprocessing** — duplicates removed, education mapped (`Basic`/`2n Cycle` → `Undergraduate`, `Master`/`PhD` → `Postgraduate`), marital status consolidated to `Single`/`Partnered`, income outliers (> 600K) removed, missing income dropped, irrelevant columns (`ID`, `Response`, `Z_CostContact`, `Z_Revenue`, `Complain`) dropped (`preprocessing.py`)
+- **Feature Engineering** — `Age` derived from 2026 − `Year_Birth`; age outliers (> 100) removed; `Total_Children`, `Total_Campaign_Accepted`, `Customer_Tenure_Days`, `Total_Purchases`, `Total_Spending`, `Spending_Per_Purchase` created; log-transform (`log1p`) applied to skewed spend columns; one-hot encoding on `Marital_Status` and `Education_Group` (`feature_engineering.py`)
+- **Scaling** — `StandardScaler` fit on engineered features, saved as `scaler.pkl` (`pipeline.py`)
+- **Dimensionality Reduction** — PCA retaining 90% variance, saved as `pca.pkl` (`clustering.py`)
+- **Optimal K Selection** — Elbow method (WCSS) + Silhouette scores evaluated across K = 2–10 (`clustering.py`)
+- **Clustering** — K-Means (K = 3, `n_init=10`) as final model; Agglomerative Clustering used for comparison (`clustering.py`)
 - **Evaluation** — Davies–Bouldin Index for cluster quality (`evaluation.py`)
 
 ## Models Used
@@ -47,17 +48,16 @@ customer-segmentation-clustering/
 │   └── project_analysis.ipynb       # EDA & exploration notebook
 ├── outputs/
 │   ├── models/                      # scaler.pkl, pca.pkl, kmeans_model.pkl
-│   └── clusters/                    # Cluster assignment CSV
-│   └── reports/                     # Contains all the reports
+│   ├── clusters/                    # Cluster assignment CSV
+│   └── reports/                     # Plots & reports (e.g. silhouette_scores.png)
 ├── src/
-│   ├── preprocessing.py             # Cleaning & outlier removal
-│   ├── feature_engineering.py       # Feature creation, encoding & scaling
-│   ├── clustering.py                # PCA, KMeans, Agglomerative helpers
+│   ├── preprocessing.py             # Cleaning, outlier removal & encoding prep
+│   ├── feature_engineering.py       # Feature creation, log-transform, encoding & scaling
+│   ├── clustering.py                # PCA, Elbow, Silhouette, KMeans & Agglomerative helpers
 │   ├── evaluation.py                # Davies–Bouldin scoring
 │   └── pipeline.py                  # End-to-end pipeline — trains & saves models
-│
 ├── app.py                           # Streamlit customer segment predictor
-├── main.py                          # main file to run the pipeline
+├── main.py                          # Entry point to run the pipeline
 └── requirements.txt
 ```
 

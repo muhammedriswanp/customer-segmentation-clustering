@@ -16,7 +16,6 @@ def map_education_groups(df):
     return df
 
 def clean_marital_status(df):
-    df = df.copy() # update this when get warning
     df['Marital_Status'] = df['Marital_Status'].replace('Alone','Single')
     df = df[ ~ df['Marital_Status'].isin(['Absurd', 'YOLO'])]
     df['Marital_Status'] = df['Marital_Status'].replace({
